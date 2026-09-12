@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anchorbonds — Build Real Confidence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0a0a0c;
+    --bg-raised: #121215;
+    --ink: #f3f3f0;
+    --ink-dim: #9c9c9e;
+    --ink-faint: #616164;
+    --flame: #ff5a2e;
+    --flame-soft: rgba(255,90,46,0.14);
+    --ice: #4fd6ff;
+    --ice-soft: rgba(79,214,255,0.14);
+    --line: rgba(255,255,255,0.09);
+    --glass: rgba(255,255,255,0.035);
+    --radius: 22px;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter', -apple-system, sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important; }
+  }
+
+  h1,h2,h3{
+    font-family:'Unbounded', sans-serif;
+    font-weight:700;
+    line-height:1.08;
+    letter-spacing:-0.01em;
+  }
+
+  a{ color:inherit; text-decoration:none; }
+  img{ max-width:100%; display:block; }
+
+  .wrap{
+    max-width:1120px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  section{ position:relative; }
+
+  ::selection{ background:var(--flame); color:#0a0a0c; }
+
+  :focus-visible{
+    outline:2px solid var(--ice);
+    outline-offset:4px;
+    border-radius:6px;
+  }
+
+  /* ---------- nav ---------- */
+  .nav{
+    position:fixed;
+    top:0; left:0; right:0;
+    z-index:100;
+    padding:18px 24px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    backdrop-filter:blur(14px);
+    background:rgba(10,10,12,0.55);
+    border-bottom:1px solid transparent;
+    transition:border-color .3s ease;
+  }
+  .nav.scrolled{ border-bottom-color:var(--line); }
+  .nav-mark{
+    font-family:'Unbounded', sans-serif;
+    font-weight:700;
+    font-size:1.05rem;
+    letter-spacing:-0.02em;
+  }
+  .nav-cta{
+    font-size:0.82rem;
+    font-weight:600;
+    padding:9px 18px;
+    border-radius:100px;
+    background:var(--ink);
+    color:var(--bg);
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    min-height:100svh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:120px 0 80px;
+    background:
+      radial-gradient(ellipse 60% 45% at 30% 12%, rgba(255,90,46,0.16), transparent 60%),
+      radial-gradient(ellipse 55% 40% at 85% 85%, rgba(79,214,255,0.10), transparent 60%);
+  }
+
+  .badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:0.82rem;
+    font-weight:600;
+    color:var(--ink-dim);
+    background:var(--glass);
+    border:1px solid var(--line);
+    padding:8px 16px;
+    border-radius:100px;
+    width:fit-content;
+    margin-bottom:34px;
+  }
+
+  .hero h1{
+    font-size:clamp(2.4rem, 7.4vw, 4.6rem);
+    max-width:15ch;
+  }
+  .hero h1 .line{
+    display:block;
+    overflow:hidden;
+  }
+  .hero h1 .line span{
+    display:block;
+    transform:translateY(110%);
+    animation:riseIn .85s cubic-bezier(.19,1,.22,1) forwards;
+  }
+  .hero h1 .line:nth-child(2) span{ animation-delay:.12s; }
+
+  @keyframes riseIn{ to{ transform:translateY(0); } }
+
+  .hero-sub{
+    margin-top:26px;
+    font-size:clamp(1.02rem, 2vw, 1.2rem);
+    color:var(--ink-dim);
+    max-width:46ch;
+    opacity:0;
+    animation:fadeUp .8s ease forwards;
+    animation-delay:.5s;
+  }
+
+  @keyframes fadeUp{ from{ opacity:0; transform:translateY(14px);} to{ opacity:1; transform:translateY(0);} }
+
+  .hero-actions{
+    margin-top:40px;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:20px;
+    opacity:0;
+    animation:fadeUp .8s ease forwards;
+    animation-delay:.68s;
+  }
+
+  .btn-primary{
+    position:relative;
+    font-family:'Unbounded', sans-serif;
+    font-weight:600;
+    font-size:0.95rem;
+    color:#0a0a0c;
+    background:var(--flame);
+    padding:18px 34px;
+    border-radius:100px;
+    box-shadow:0 0 0 0 rgba(255,90,46,0.5);
+    transition:transform .25s ease, box-shadow .35s ease;
+    display:inline-block;
+  }
+  .btn-primary:hover{
+    box-shadow:0 8px 40px -6px rgba(255,90,46,0.65);
+  }
+
+  .btn-ghost{
+    font-size:0.9rem;
+    font-weight:600;
+    color:var(--ink-dim);
+    border-bottom:1px solid var(--ink-faint);
+    padding-bottom:2px;
+    transition:color .2s ease, border-color .2s ease;
+  }
+  .btn-ghost:hover{ color:var(--ink); border-color:var(--ink); }
+
+  .trust-line{
+    margin-top:22px;
+    font-size:0.85rem;
+    color:var(--ink-faint);
+    opacity:0;
+    animation:fadeUp .8s ease forwards;
+    animation-delay:.82s;
+  }
+
+  /* ---------- reveal on scroll ---------- */
+  .reveal{
+    opacity:0;
+    transform:translateY(24px);
+    transition:opacity .7s ease, transform .7s ease;
+  }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  /* ---------- section heading ---------- */
+  .section{ padding:120px 0; }
+  .section-head{ max-width:46ch; margin-bottom:56px; }
+  .section-head h2{ font-size:clamp(1.9rem, 4.6vw, 2.9rem); }
+  .section-head p{ margin-top:16px; color:var(--ink-dim); font-size:1.05rem; }
+
+  /* ---------- pain points ---------- */
+  .pain-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:16px;
+  }
+  .pain-card{
+    background:var(--glass);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:32px 26px;
+    transition:transform .3s ease, border-color .3s ease, background .3s ease;
+  }
+  .pain-card:hover{
+    transform:translateY(-4px);
+    border-color:rgba(255,90,46,0.35);
+    background:rgba(255,90,46,0.05);
+  }
+  .pain-card .icon{ font-size:1.6rem; margin-bottom:18px; display:block; }
+  .pain-card h3{ font-size:1.08rem; font-weight:600; margin-bottom:10px; font-family:'Inter',sans-serif; }
+  .pain-card p{ color:var(--ink-dim); font-size:0.95rem; }
+
+  .pain-close{
+    margin-top:52px;
+    font-size:clamp(1.3rem, 3vw, 1.7rem);
+    font-family:'Unbounded', sans-serif;
+    font-weight:600;
+    max-width:22ch;
+    line-height:1.3;
+  }
+  .pain-close .dim{ color:var(--ink-faint); }
+
+  /* ---------- transformation ---------- */
+  .transform-section{
+    background:var(--bg-raised);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+  }
+  .transform-grid{
+    display:grid;
+    grid-template-columns:1fr auto 1fr;
+    gap:28px;
+    align-items:stretch;
+  }
+  .t-col{
+    border-radius:var(--radius);
+    padding:34px 28px;
+    border:1px solid var(--line);
+  }
+  .t-col.before{ background:linear-gradient(160deg, rgba(79,214,255,0.08), transparent 70%); }
+  .t-col.after{ background:linear-gradient(160deg, rgba(255,90,46,0.10), transparent 70%); }
+  .t-label{
+    font-family:'Unbounded', sans-serif;
+    font-size:0.78rem;
+    font-weight:600;
+    margin-bottom:22px;
+  }
+  .t-col.before .t-label{ color:var(--ice); }
+  .t-col.after .t-label{ color:var(--flame); }
+  .t-col ul{ list-style:none; display:flex; flex-direction:column; gap:14px; }
+  .t-col li{ font-size:0.98rem; color:var(--ink); padding-left:20px; position:relative; }
+  .t-col.before li::before{ content:''; position:absolute; left:0; top:9px; width:6px; height:6px; border-radius:50%; background:var(--ice); }
+  .t-col.after li::before{ content:''; position:absolute; left:0; top:9px; width:6px; height:6px; border-radius:50%; background:var(--flame); }
+
+  .t-arrow{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.4rem;
+    color:var(--ink-faint);
+  }
+
+  .transform-note{
+    margin-top:48px;
+    text-align:center;
+    font-family:'Unbounded', sans-serif;
+    font-size:clamp(1.2rem, 2.8vw, 1.5rem);
+    font-weight:600;
+    max-width:26ch;
+    margin-left:auto;
+    margin-right:auto;
+    line-height:1.35;
+  }
+  .transform-note .dim{ color:var(--ink-faint); display:block; }
+
+  /* ---------- learn cards ---------- */
+  .learn-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:16px;
+  }
+  .learn-card{
+    background:var(--glass);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:30px 24px;
+    transition:transform .3s ease, border-color .3s ease;
+  }
+  .learn-card:hover{ transform:translateY(-4px); border-color:rgba(255,255,255,0.2); }
+  .learn-card .icon{ font-size:1.5rem; margin-bottom:16px; display:block; }
+  .learn-card h3{ font-size:1.02rem; font-weight:600; margin-bottom:8px; font-family:'Inter',sans-serif; }
+  .learn-card p{ color:var(--ink-dim); font-size:0.92rem; }
+
+  /* ---------- statement ---------- */
+  .statement{
+    padding:160px 0;
+    text-align:center;
+  }
+  .statement h2{
+    font-size:clamp(2.4rem, 8vw, 5.2rem);
+    line-height:1.02;
+  }
+  .statement p{
+    margin:28px auto 0;
+    max-width:42ch;
+    color:var(--ink-dim);
+    font-size:1.05rem;
+  }
+
+  /* ---------- offer ---------- */
+  .offer-card{
+    max-width:520px;
+    margin:0 auto;
+    background:linear-gradient(180deg, rgba(255,90,46,0.10), rgba(255,255,255,0.02));
+    border:1px solid rgba(255,90,46,0.3);
+    border-radius:28px;
+    padding:48px 38px;
+    text-align:center;
+  }
+  .offer-badge{
+    display:inline-flex;
+    font-size:0.8rem;
+    font-weight:600;
+    color:var(--flame);
+    background:var(--flame-soft);
+    padding:7px 16px;
+    border-radius:100px;
+    margin-bottom:26px;
+  }
+  .offer-price{
+    font-family:'Unbounded', sans-serif;
+    font-size:4.2rem;
+    font-weight:700;
+    line-height:1;
+  }
+  .offer-price sup{ font-size:1.6rem; top:-1.6em; }
+  .offer-desc{ margin:18px auto 30px; color:var(--ink-dim); max-width:32ch; }
+  .offer-list{
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    text-align:left;
+    margin-bottom:36px;
+  }
+  .offer-list li{ font-size:0.96rem; display:flex; gap:10px; align-items:flex-start; }
+  .offer-list li::before{ content:'✓'; color:var(--flame); font-weight:700; flex-shrink:0; }
+  .offer-cta{
+    display:block;
+    width:100%;
+    text-align:center;
+    font-family:'Unbounded', sans-serif;
+    font-weight:600;
+    font-size:1rem;
+    color:#0a0a0c;
+    background:var(--flame);
+    padding:20px;
+    border-radius:100px;
+    box-shadow:0 12px 40px -10px rgba(255,90,46,0.55);
+    transition:transform .25s ease;
+  }
+  .offer-cta:hover{ transform:translateY(-2px); }
+  .offer-foot{ margin-top:20px; font-size:0.85rem; color:var(--ink-faint); }
+
+  /* ---------- testimonials ---------- */
+  .testi-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:16px;
+  }
+  .testi-card{
+    background:var(--glass);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:30px 26px;
+  }
+  .testi-card p{ font-size:0.98rem; color:var(--ink); }
+  .testi-name{ margin-top:20px; font-size:0.85rem; color:var(--ink-faint); font-weight:600; }
+
+  /* ---------- final cta ---------- */
+  .final-cta{
+    padding:160px 0;
+    text-align:center;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 0%, rgba(255,90,46,0.14), transparent 65%);
+    border-top:1px solid var(--line);
+  }
+  .final-cta h2{
+    font-size:clamp(2.1rem, 6.6vw, 3.6rem);
+    max-width:16ch;
+    margin:0 auto;
+  }
+  .final-cta p{ margin:24px auto 40px; max-width:38ch; color:var(--ink-dim); }
+  .final-foot{ margin-top:26px; font-size:0.85rem; color:var(--ink-faint); }
+
+  /* ---------- footer ---------- */
+  footer{
+    padding:60px 0 40px;
+    border-top:1px solid var(--line);
+  }
+  .foot-grid{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    gap:32px;
+  }
+  .foot-mark{ font-family:'Unbounded', sans-serif; font-weight:700; }
+  .foot-links{ display:flex; flex-wrap:wrap; gap:24px; list-style:none; }
+  .foot-links a{ font-size:0.88rem; color:var(--ink-dim); transition:color .2s ease; }
+  .foot-links a:hover{ color:var(--ink); }
+  .foot-bottom{ margin-top:40px; font-size:0.8rem; color:var(--ink-faint); }
+
+  /* ---------- responsive ---------- */
+  @media (max-width:820px){
+    .pain-grid, .learn-grid, .testi-grid{ grid-template-columns:1fr; }
+    .transform-grid{ grid-template-columns:1fr; }
+    .t-arrow{ transform:rotate(90deg); padding:4px 0; }
+    .section{ padding:88px 0; }
+    .statement{ padding:110px 0; }
+    .final-cta{ padding:110px 0; }
+    .offer-card{ padding:38px 26px; }
+    .hero{ padding-top:110px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <span class="nav-mark">anchorbonds</span>
+  <a href="#offer" class="nav-cta">Start — ₹89</a>
+</nav>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="badge">🔥 Your confidence journey starts here</span>
+    <h1>
+      <span class="line"><span>Getting girls is way easier</span></span>
+      <span class="line"><span>when you stop doubting yourself.</span></span>
+    </h1>
+    <p class="hero-sub">Confidence is the real game-changer. Learn how to approach, communicate, flirt, and build genuine connections — without pretending to be someone you're not.</p>
+    <div class="hero-actions">
+      <a href="https://rzp.io/rzp/6Ip1BE0P" class="btn-primary">Get Access — ₹89</a>
+      <a href="#pain" class="btn-ghost">See how it works ↓</a>
+    </div>
+    <p class="trust-line">One small step. A completely different mindset.</p>
+  </div>
+</section>
+
+<section class="section" id="pain">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>Still stuck in the friendzone?</h2>
+    </div>
+    <div class="pain-grid">
+      <div class="pain-card reveal">
+        <span class="icon">💬</span>
+        <h3>You don't know what to say</h3>
+        <p>You overthink every message and end up killing the conversation.</p>
+      </div>
+      <div class="pain-card reveal">
+        <span class="icon">😶</span>
+        <h3>Confidence disappears around her</h3>
+        <p>You know exactly what you want to say — but your nerves take over.</p>
+      </div>
+      <div class="pain-card reveal">
+        <span class="icon">📱</span>
+        <h3>Texting feels impossible</h3>
+        <p>You constantly wonder if you're being too boring, too available, or too much.</p>
+      </div>
+      <div class="pain-card reveal">
+        <span class="icon">💔</span>
+        <h3>You keep becoming "just a friend"</h3>
+        <p>You want to create attraction while still being genuine and respectful.</p>
+      </div>
+    </div>
+    <p class="pain-close reveal">You don't need a new personality. <span class="dim">You need better confidence and better communication.</span></p>
+  </div>
+</section>
+
+<section class="section transform-section">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>From overthinking to confidence</h2>
+    </div>
+    <div class="transform-grid">
+      <div class="t-col before reveal">
+        <div class="t-label">BEFORE</div>
+        <ul>
+          <li>Nervous</li>
+          <li>Overthinking</li>
+          <li>Afraid of rejection</li>
+          <li>Can't start conversations</li>
+          <li>Always playing it safe</li>
+        </ul>
+      </div>
+      <div class="t-arrow reveal">→</div>
+      <div class="t-col after reveal">
+        <div class="t-label">AFTER</div>
+        <ul>
+          <li>Confident</li>
+          <li>Comfortable approaching</li>
+          <li>Better conversations</li>
+          <li>Stronger social skills</li>
+          <li>More authentic connections</li>
+        </ul>
+      </div>
+    </div>
+    <p class="transform-note reveal">Confidence isn't something you're born with. <span class="dim">It's something you build.</span></p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>What you'll learn</h2>
+      <p>Six practical skill areas that work together — not a script to memorize.</p>
+    </div>
+    <div class="learn-grid">
+      <div class="learn-card reveal">
+        <span class="icon">🔥</span>
+        <h3>Build real confidence</h3>
+        <p>Stop seeking validation and become comfortable being yourself.</p>
+      </div>
+      <div class="learn-card reveal">
+        <span class="icon">🗣️</span>
+        <h3>Conversation skills</h3>
+        <p>Learn how to start and maintain engaging conversations naturally.</p>
+      </div>
+      <div class="learn-card reveal">
+        <span class="icon">❤️</span>
+        <h3>Create genuine attraction</h3>
+        <p>Understand how confidence, personality, body language, and emotional connection work together.</p>
+      </div>
+      <div class="learn-card reveal">
+        <span class="icon">📱</span>
+        <h3>Better texting</h3>
+        <p>Learn how to communicate without constantly overthinking every message.</p>
+      </div>
+      <div class="learn-card reveal">
+        <span class="icon">🚫</span>
+        <h3>Escape the friendzone mindset</h3>
+        <p>Stop acting like you need to earn someone's attention. Build mutual interest instead.</p>
+      </div>
+      <div class="learn-card reveal">
+        <span class="icon">🧠</span>
+        <h3>Stronger mindset</h3>
+        <p>Develop confidence that improves your dating life and your everyday social life.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="statement">
+  <div class="wrap reveal">
+    <h2>Stop chasing.<br>Start connecting.</h2>
+    <p>The goal isn't to manipulate someone into liking you. The goal is to become confident enough to show up, communicate clearly, and find people who genuinely like you back.</p>
+  </div>
+</section>
+
+<section class="section" id="offer">
+  <div class="wrap">
+    <div class="offer-card reveal">
+      <span class="offer-badge">🔥 Start here</span>
+      <div class="offer-price"><sup>₹</sup>89</div>
+      <p class="offer-desc">Your first step toward becoming more confident, socially comfortable, and better at relationships.</p>
+      <ul class="offer-list">
+        <li>Confidence fundamentals</li>
+        <li>Conversation techniques</li>
+        <li>Dating mindset</li>
+        <li>Texting guidance</li>
+        <li>Friendzone awareness</li>
+        <li>Practical exercises</li>
+      </ul>
+      <a href="https://rzp.io/rzp/6Ip1BE0P" class="offer-cta">Get Access — ₹89</a>
+      <p class="offer-foot">One decision. One new mindset. ₹89 to start.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>People who started here</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+        <p>"I realized my biggest problem wasn't girls — it was my confidence. This completely changed how I approach conversations."</p>
+        <div class="testi-name">Rohan, 21</div>
+      </div>
+      <div class="testi-card reveal">
+        <p>"I stopped overthinking every text and actually became comfortable being myself."</p>
+        <div class="testi-name">Aditya, 23</div>
+      </div>
+      <div class="testi-card reveal">
+        <p>"The confidence part helped me way beyond dating. It showed up at work too."</p>
+        <div class="testi-name">Kabir, 20</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="final-cta">
+  <div class="wrap reveal">
+    <h2>Don't stay stuck in the friendzone forever.</h2>
+    <p>Build confidence. Improve your communication. Meet people who genuinely connect with you.</p>
+    <a href="https://rzp.io/rzp/6Ip1BE0P" class="btn-primary">Get Access for ₹89 →</a>
+    <p class="final-foot">No fake pickup lines. No manipulation. Just confidence, communication & real connection.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-grid">
+    <span class="foot-mark">anchorbonds</span>
+    <ul class="foot-links">
+      <li><a href="https://www.instagram.com/iamnotyourankit/">Instagram</a></li>
+      <li><a href="https://wa.me/917439529025">WhatsApp</a></li>
+    </ul>
+  </div>
+  <div class="wrap foot-bottom">© 2026 Anchorbonds. All rights reserved.</div>
+</footer>
+
+<script>
+  // nav border on scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 10);
+  }, { passive:true });
+
+  // reveal on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        e.target.classList.add('in');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold:0.15 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // magnetic primary buttons (desktop only)
+  if(window.matchMedia('(hover: hover)').matches){
+    document.querySelectorAll('.btn-primary, .offer-cta').forEach(btn => {
+      btn.addEventListener('mousemove', (e) => {
+        const r = btn.getBoundingClientRect();
+        const x = e.clientX - r.left - r.width/2;
+        const y = e.clientY - r.top - r.height/2;
+        btn.style.transform = `translate(${x*0.15}px, ${y*0.35}px)`;
+      });
+      btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
+    });
+  }
+</script>
+
+</body>
+</html>
